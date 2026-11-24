@@ -245,6 +245,11 @@ function logoDataUri() {
   } catch (err) { LOGO_CACHE = ''; }
   return LOGO_CACHE;
 }
+// En los correos se usa la imagen publicada (Gmail bloquea las imágenes incrustadas);
+// en el PDF se incrusta, porque el conversor no descarga imágenes de internet.
+function logoCorreo(alto) {
+  return '<img src="' + LOGO_URL + '" alt="Archiff" height="' + alto + '" style="height:' + alto + 'px;width:auto;display:block;border:0">';
+}
 function logoHtml(alto) {
   var uri = logoDataUri();
   return uri ? '<img src="' + uri + '" alt="Archiff" style="height:' + alto + 'px">' : '<span style="font-size:' + alto + 'px;font-weight:bold;color:#111118">.archiff</span>';
@@ -317,7 +322,7 @@ function htmlCorreoAlumno(d) {
     ? '<p>Has elegido el <strong>pago único</strong>. Haz la transferencia de <strong>' + esc(d.importeTexto) + '</strong> en un plazo máximo de <strong>15 días</strong> con estos datos:</p>' + tabla(filasBanco(d))
     : '<p>Has elegido pagar en <strong>' + esc(d.numCuotas) + ' cuotas</strong> de <strong>' + esc(d.importeTexto) + '</strong>. Las cobraremos por <strong>domiciliación bancaria</strong> en la cuenta que nos has indicado (terminada en ' + esc(String(d.iban || '').slice(-4)) + ').</p>';
   return '<div style="font-family:Arial,Helvetica,sans-serif;color:#111118;font-size:15px;line-height:1.55;max-width:600px">' +
-    '<p>' + logoHtml(22) + '</p>' +
+    '<p>' + logoCorreo(22) + '</p>' +
     '<p>Hola, ' + esc(d.nombre) + ':</p>' +
     '<p>¡Gracias por completar tu matrícula en el <strong>' + esc(m.nombre) + '</strong>! Te adjuntamos tu ficha de matrícula en PDF.</p>' +
     '<h3 style="color:' + AZUL + ';font-size:16px;margin:20px 0 6px">Resumen de tu matrícula</h3>' + tabla(filasResumen(d)) +
