@@ -160,10 +160,12 @@ function anotarRegistro(raiz, d, enlacePdf, fecha) {
     h.getRange(1, 1, 1, 9).setFontWeight('bold').setBackground('#F1F1FC');
     h.setFrozenRows(1);
   }
-  ss.getSheets()[0].appendRow([
+  // Se escribe como texto para que Sheets no convierta "Octubre 2027" en fecha ni los importes en números.
+  var hoja = ss.getSheets()[0], fila = hoja.getLastRow() + 1;
+  hoja.getRange(fila, 1, 1, 9).setNumberFormat('@').setValues([[
     Utilities.formatDate(fecha, ZONA, 'dd/MM/yyyy HH:mm'), d.referencia, d.apellidos + ', ' + d.nombre, d.email,
     MASTERS[d.formacionCode].nombre, d.convocatoria, d.pagoTexto, d.importeTexto, enlacePdf
-  ]);
+  ]]);
 }
 
 /* =====================================================================
