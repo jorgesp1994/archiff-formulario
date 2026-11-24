@@ -4,7 +4,7 @@
 use strict; use warnings;
 
 # ---- Ajustes que se pueden cambiar ----
-my $SCRIPT_URL      = '';      # URL de la aplicación web de Apps Script (la pasa Vero)
+my $SCRIPT_URL      = 'https://script.google.com/macros/s/AKfycbxt6tvqY9iqWU-D3qNr71plCSBUvFTwqCwrxcx9dQDPT0c0M4g2aO5tytvMxU_Z4FvukA/exec';      # URL de la aplicación web de Apps Script (la pasa Vero)
 my $SUBSCRIPTION_ID = 'null';  # ID del tipo de suscripción "Marketing Information" en HubSpot
 my %VERSIONES = (
   'matricula/index.html'            => { precio => 3357, early => 'false', badge => '' },
