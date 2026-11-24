@@ -1,0 +1,5 @@
+.env
+.DS_Store
+# originales de trabajo, no se publican
+/perfil-*.html
+.claude/
