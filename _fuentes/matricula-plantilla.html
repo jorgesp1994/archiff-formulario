@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Ficha de matrícula · Archiff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --accent:#2222C2; --accent-hover:#1A1A9A; --accent-soft:#F1F1FC; --accent-line:#D6D6F5;
+  --ink:#111118; --muted:#5A5A6B; --line:#E4E4EE; --field:#F3F3F8; --field-line:#8E8EA3;
+  --page:#FFFFFF; --surface:#FFFFFF; --opt-line:#C9C9D8; --on-accent:#FFFFFF;
+  --warn-bg:#FFF1E6; --warn-ink:#8A3A00; color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:90px;scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--page);color:var(--ink);font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}a:hover{color:var(--accent-hover)}
+img{max-width:100%}
+[hidden]{display:none!important}
+
+.topbar{position:sticky;top:0;z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1180px;margin:0 auto;padding:16px clamp(16px,4vw,48px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 24px}
+.logo{height:30px;width:auto;display:block}
+.topbar-meta{font-size:13px;font-weight:500;color:var(--muted)}
+
+main{max-width:800px;margin:0 auto;padding:40px clamp(16px,4vw,48px) 80px}
+.intro{margin-bottom:32px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.badge{display:inline-flex;align-items:center;padding:6px 14px;border:1px solid var(--accent);border-radius:999px;font-size:14px;font-weight:600;color:var(--accent);background:var(--accent-soft)}
+.badge.solid{background:var(--accent);color:var(--on-accent)}
+h1{margin:0 0 12px;font-size:clamp(28px,4.5vw,40px);line-height:1.15;font-weight:700;letter-spacing:-0.02em;color:var(--accent)}
+.intro p{margin:0;max-width:660px;font-size:17px;line-height:1.55;color:var(--muted)}
+
+form{display:flex;flex-direction:column;gap:24px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:clamp(20px,3.5vw,32px)}
+h2{margin:0 0 6px;font-size:22px;font-weight:700;letter-spacing:-0.01em;color:var(--accent)}
+.lead{margin:0 0 24px;font-size:15px;line-height:1.55;color:var(--muted)}
+.stack{display:flex;flex-direction:column;gap:24px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:20px}
+.f-label{display:block;font-size:15px;font-weight:600;color:var(--ink);margin-bottom:4px;line-height:1.4}
+.req{color:var(--accent);font-style:normal}
+.f-hint{display:block;font-size:13px;line-height:1.45;color:var(--muted);margin:0 0 10px}
+.f-input{width:100%;min-height:48px;padding:12px 14px;font:inherit;font-size:16px;color:var(--ink);background:var(--field);border:1px solid var(--field-line);border-radius:10px}
+.f-input::placeholder{color:var(--muted);opacity:.85}
+.f-input:focus-visible{outline:3px solid var(--accent);outline-offset:1px;background:var(--surface)}
+.f-input[readonly]{background:var(--accent-soft);border-color:var(--accent-line);color:var(--accent);font-weight:600}
+.f-input.invalid{border-color:#C2410C;border-width:2px}
+.err{display:none;margin-top:6px;font-size:13px;font-weight:500;color:#C2410C}
+.invalid + .err,.group-invalid .err{display:block}
+
+.opts{display:grid;gap:10px}
+.opts.cols2{grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr))}
+.opt{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;border-radius:14px;border:1px solid var(--opt-line);background:var(--surface);cursor:pointer}
+.opt:hover{border-color:var(--accent)}
+.opt:has(input:checked){border:2px solid var(--accent);background:var(--accent-soft);padding:15px 17px}
+.opt:focus-within{outline:3px solid var(--ink);outline-offset:2px}
+.opt input{width:20px;height:20px;margin:2px 0 0;flex:none;accent-color:var(--accent)}
+.opt-body{flex:1;display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px}
+.opt-title{display:block;font-size:15px;font-weight:600;line-height:1.4}
+.opt-desc{display:block;font-size:14px;line-height:1.45;color:var(--muted);margin-top:2px}
+.opt-amount{font-size:18px;font-weight:700;color:var(--accent);white-space:nowrap}
+.opt-amount small{display:block;font-size:12px;font-weight:500;color:var(--muted);text-align:right}
+
+.price-line{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 16px;padding:14px 18px;margin-bottom:20px;border-radius:12px;background:#F8F8FD;border:1px solid var(--line);font-size:14px;color:var(--muted)}
+.price-line strong{color:var(--ink)}
+
+.highlight{padding:20px;border-radius:14px;background:var(--accent-soft);border:1px solid var(--accent-line)}
+.highlight .f-label{color:var(--accent)}
+.highlight .f-input{background:var(--surface)}
+.bank{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin:12px 0 0;font-size:14px}
+.bank dt{color:var(--muted)}
+.bank dd{margin:0;font-weight:600;word-break:break-word}
+.bank-note{margin:14px 0 0;font-size:14px;line-height:1.5}
+
+.chk{display:flex;align-items:flex-start;gap:12px;font-size:14px;line-height:1.5}
+.chk input{width:20px;height:20px;margin:2px 0 0;flex:none;accent-color:var(--accent)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:12px 28px;font:inherit;font-size:16px;font-weight:600;border-radius:999px;cursor:pointer;text-decoration:none;border:1px solid var(--accent)}
+.btn:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.btn-primary{background:var(--accent);color:var(--on-accent)}
+.btn-primary:hover{background:var(--accent-hover);border-color:var(--accent-hover);color:var(--on-accent)}
+.btn-primary:disabled{opacity:.6;cursor:wait}
+.btn-full{width:100%}
+.form-error{display:none;margin:0;padding:12px 16px;border-radius:12px;background:var(--warn-bg);color:var(--warn-ink);font-size:14px;font-weight:500}
+.form-error.show{display:block}
+
+#done{display:none}
+#done.show{display:block}
+.done-icon{display:flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:var(--accent);color:var(--on-accent);margin-bottom:20px}
+.done-title{margin:0 0 8px;font-size:28px;font-weight:700;letter-spacing:-0.01em;color:var(--accent)}
+.sheet{border:1px solid var(--line);border-radius:12px;padding:24px;background:#F8F8FD}
+.sheet-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.kv{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 16px;padding:12px 0;border-bottom:1px solid var(--line);font-size:14px}
+.kv:last-child{border-bottom:0;padding-bottom:0}
+.kv-k{color:var(--muted)}
+.kv-v{font-weight:600;text-align:right}
+.send-box{margin-top:24px;padding:20px;border-radius:14px;background:var(--accent-soft);border:1px solid var(--accent-line);font-size:15px;line-height:1.55}
+.send-box strong{color:var(--accent)}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <img class="logo" src="__LOGO__" alt="Archiff">
+    <span class="topbar-meta">Ficha de matrícula</span>
+  </div>
+</header>
+
+<main>
+<div id="formwrap">
+  <div class="intro">
+    <div class="badges"><span class="badge">Reserva de 250 € pagada</span>__BADGE_EARLY__</div>
+    <h1>Completa tu matrícula</h1>
+    <p>Ya tienes tu plaza reservada. Rellena tus datos y elige cómo quieres pagar el resto de la formación.</p>
+  </div>
+
+  <form id="form" novalidate>
+
+    <section class="card" aria-labelledby="h-formacion">
+      <h2 id="h-formacion">Tu formación</h2>
+      <p class="lead">Elige el máster y la convocatoria en la que te has reservado plaza.</p>
+      <div class="stack">
+        <div><label class="f-label" for="formacion">Formación <i class="req">*</i></label>
+          <select id="formacion" class="f-input" required><option value="">Selecciona tu formación</option></select>
+          <span class="err">Elige tu formación.</span></div>
+        <div class="grid2">
+          <div><label class="f-label" for="convocatoria">Convocatoria <i class="req">*</i></label>
+            <select id="convocatoria" class="f-input" required disabled><option value="">Elige antes la formación</option></select>
+            <span class="err">Elige la convocatoria.</span></div>
+          <div><label class="f-label" for="horario">Horario</label>
+            <input id="horario" class="f-input" type="text" readonly value="—" tabindex="-1"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="h-pago">
+      <h2 id="h-pago">¿Cómo quieres pagar el resto?</h2>
+      <p class="lead">La reserva de 250 € ya está abonada y es independiente del precio de la formación.</p>
+      <div class="price-line"><span>Precio de la formación</span><strong id="precio-txt"></strong></div>
+      <div class="group" id="grp-pago">
+        <div class="opts" role="radiogroup" aria-labelledby="h-pago">
+          <label class="opt"><input type="radio" name="pago" value="unico"><span class="opt-body"><span><span class="opt-title">Pago único con un 4 % de descuento</span><span class="opt-desc">Por transferencia bancaria, en un plazo máximo de 15 días.</span></span><span class="opt-amount" id="amt-unico"></span></span></label>
+          <label class="opt"><input type="radio" name="pago" value="6"><span class="opt-body"><span><span class="opt-title">6 cuotas sin intereses</span><span class="opt-desc">Por domiciliación bancaria.</span></span><span class="opt-amount" id="amt-6"></span></span></label>
+          <label class="opt"><input type="radio" name="pago" value="10"><span class="opt-body"><span><span class="opt-title">10 cuotas sin intereses</span><span class="opt-desc">Por domiciliación bancaria.</span></span><span class="opt-amount" id="amt-10"></span></span></label>
+        </div>
+        <span class="err">Elige cómo quieres pagar.</span>
+      </div>
+
+      <div class="highlight" id="box-transfer" hidden style="margin-top:20px">
+        <span class="f-label">Datos para la transferencia</span>
+        <dl class="bank" id="bank-form"></dl>
+        <p class="bank-note">Haz la transferencia en un plazo máximo de <strong>15 días</strong> desde que envíes esta ficha.</p>
+      </div>
+
+      <div class="highlight" id="box-domiciliacion" hidden style="margin-top:20px">
+        <div class="stack">
+          <div><label class="f-label" for="titular">Titular de la cuenta <i class="req">*</i></label>
+            <input id="titular" class="f-input" type="text" autocomplete="name" data-pay="1"><span class="err">Escribe el titular de la cuenta.</span></div>
+          <div class="grid2">
+            <div><label class="f-label" for="iban">IBAN <i class="req">*</i></label>
+              <input id="iban" class="f-input" type="text" inputmode="text" autocomplete="off" placeholder="ES00 0000 0000 0000 0000 0000" data-pay="1"><span class="err">Revisa el IBAN: no es correcto.</span></div>
+            <div><label class="f-label" for="bic">BIC</label>
+              <input id="bic" class="f-input" type="text" autocomplete="off" placeholder="Opcional"></div>
+          </div>
+          <div class="group" id="grp-sepa">
+            <label class="chk"><input type="checkbox" id="sepa"><span>Autorizo a Archiff a cobrar las cuotas de mi matrícula en esta cuenta mediante domiciliación bancaria. <i class="req">*</i></span></label>
+            <span class="err">Necesitamos tu autorización para domiciliar las cuotas.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="h-datos">
+      <h2 id="h-datos">Tus datos personales</h2>
+      <p class="lead">Tal y como aparecen en tu documento de identidad.</p>
+      <div class="grid2">
+        <div><label class="f-label" for="nombre">Nombre <i class="req">*</i></label><input id="nombre" class="f-input" type="text" autocomplete="given-name" required><span class="err">Escribe tu nombre.</span></div>
+        <div><label class="f-label" for="apellidos">Apellidos <i class="req">*</i></label><input id="apellidos" class="f-input" type="text" autocomplete="family-name" required><span class="err">Escribe tus apellidos.</span></div>
+        <div><label class="f-label" for="nacimiento">Fecha de nacimiento <i class="req">*</i></label><input id="nacimiento" class="f-input" type="date" autocomplete="bday" required><span class="err">Indica tu fecha de nacimiento.</span></div>
+        <div><label class="f-label" for="email">Correo electrónico <i class="req">*</i></label><input id="email" class="f-input" type="email" autocomplete="email" required><span class="err">Escribe un correo válido.</span></div>
+        <div><label class="f-label" for="telefono">Teléfono <i class="req">*</i></label><input id="telefono" class="f-input" type="tel" autocomplete="tel" placeholder="+34 600 000 000" required><span class="err">Escribe tu teléfono.</span></div>
+        <div><label class="f-label" for="pais">País de domicilio <i class="req">*</i></label><input id="pais" class="f-input" type="text" autocomplete="country-name" value="España" required><span class="err">Indica tu país.</span></div>
+        <div><label class="f-label" for="nacionalidad">Nacionalidad <i class="req">*</i></label><input id="nacionalidad" class="f-input" type="text" placeholder="Ej. Española" required><span class="err">Indica tu nacionalidad.</span></div>
+        <div><label class="f-label" for="tipodoc">Tipo de documento <i class="req">*</i></label>
+          <select id="tipodoc" class="f-input" required><option value="">Selecciona</option><option>DNI</option><option>NIE</option><option>Pasaporte</option></select><span class="err">Elige el tipo de documento.</span></div>
+        <div><label class="f-label" for="numdoc">Número de documento <i class="req">*</i></label><input id="numdoc" class="f-input" type="text" autocomplete="off" required><span class="err" id="err-numdoc">Escribe el número de documento.</span></div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="h-factura">
+      <h2 id="h-factura">Datos de facturación</h2>
+      <p class="lead">Los usaremos para emitir tus facturas.</p>
+      <div class="stack">
+        <fieldset class="group" id="grp-empresa" style="border:0;margin:0;padding:0">
+          <legend class="f-label">¿Quieres la factura a nombre de una empresa? <i class="req">*</i></legend>
+          <div class="opts cols2" style="margin-top:10px">
+            <label class="opt"><input type="radio" name="empresa" value="no"><span class="opt-title">No, a mi nombre</span></label>
+            <label class="opt"><input type="radio" name="empresa" value="si"><span class="opt-title">Sí, a nombre de una empresa</span></label>
+          </div>
+          <span class="err">Elige una opción.</span>
+        </fieldset>
+        <div class="grid2" id="box-empresa" hidden>
+          <div><label class="f-label" for="razon">Razón social <i class="req">*</i></label><input id="razon" class="f-input" type="text" autocomplete="organization" data-empresa="1"><span class="err">Escribe la razón social.</span></div>
+          <div><label class="f-label" for="cif">CIF <i class="req">*</i></label><input id="cif" class="f-input" type="text" autocomplete="off" data-empresa="1"><span class="err">Revisa el CIF.</span></div>
+        </div>
+        <div><label class="f-label" for="domicilio">Domicilio <i class="req">*</i></label><input id="domicilio" class="f-input" type="text" autocomplete="street-address" placeholder="Calle, número, piso" required><span class="err">Escribe el domicilio.</span></div>
+        <div class="grid2">
+          <div><label class="f-label" for="poblacion">Población <i class="req">*</i></label><input id="poblacion" class="f-input" type="text" autocomplete="address-level2" required><span class="err">Escribe la población.</span></div>
+          <div><label class="f-label" for="provincia">Provincia <i class="req">*</i></label><input id="provincia" class="f-input" type="text" autocomplete="address-level1" required><span class="err">Escribe la provincia.</span></div>
+          <div><label class="f-label" for="cp">Código postal <i class="req">*</i></label><input id="cp" class="f-input" type="text" inputmode="numeric" autocomplete="postal-code" required><span class="err">Escribe el código postal.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="h-final">
+      <h2 id="h-final">Para terminar</h2>
+      <div class="stack">
+        <div class="group" id="grp-priv">
+          <label class="chk"><input type="checkbox" id="privacidad"><span id="txt-priv">Acepto las condiciones de matrícula y la <a href="https://archiff.com/politica-privacidad" target="_blank" rel="noopener">política de privacidad</a> de Archiff. <i class="req">*</i></span></label>
+          <span class="err">Necesitamos tu conformidad para continuar.</span>
+        </div>
+        <label class="chk"><input type="checkbox" id="comunicaciones"><span id="txt-com">Quiero recibir comunicaciones comerciales de Archiff sobre formaciones, eventos y novedades.</span></label>
+        <p class="form-error" id="formerror" role="alert"></p>
+        <button type="submit" class="btn btn-primary btn-full" id="btn-send">Enviar matrícula</button>
+      </div>
+    </section>
+  </form>
+</div>
+
+<section class="card" id="done" aria-labelledby="done-title" tabindex="-1">
+  <div class="done-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></div>
+  <h2 class="done-title" id="done-title">Hemos recibido tu matrícula</h2>
+  <p class="lead" style="max-width:580px">En unos minutos recibirás tu ficha en PDF en tu correo.</p>
+  <div class="sheet">
+    <div class="sheet-head">
+      <img class="logo" style="height:22px" src="__LOGO__" alt="Archiff">
+      <span style="font-size:13px;color:var(--muted)">Ficha de matrícula</span>
+    </div>
+    <div id="summary"></div>
+  </div>
+  <div class="send-box" id="done-transfer" hidden>
+    <strong>Datos para la transferencia.</strong> Recuerda hacerla en un plazo máximo de 15 días.
+    <dl class="bank" id="bank-done"></dl>
+  </div>
+</section>
+</main>
+
+<script>
+(function(){
+  // ---------- Configuración ----------
+  var CONFIG = {
+    precio: __PRECIO__,          // precio de la formación en euros
+    earlyBird: __EARLY__,        // true en la versión early bird
+    hubspot: { portalId: '26475799', formGuid: '6da5c987-22be-44eb-931d-3e24852efa96', subscriptionTypeId: __SUBSCRIPTION__ },
+    script: { url: '__SCRIPT_URL__', secret: '0752fe9c6a91a300260ee56c31e4f5e7' }
+  };
+  var MASTERS = [
+    { code: 'mba',        name: 'MBA en Gestión de Estudios de Arquitectura e Interiorismo', siglas: 'MBA', convs: ['Abril 2027'] },
+    { code: 'mia',        name: 'MIA – Máster en Interiorismo Aplicado, Prácticas Creativas e IA', siglas: 'MIA', convs: ['Octubre 2027'] },
+    { code: 'da',         name: 'Máster en Dirección de Arte', siglas: 'DIRECCIÓN DE ARTE', convs: ['Abril 2027', 'Octubre 2027'] },
+    { code: 'branding',   name: 'Máster en Branding y Estrategia de Marca', siglas: 'BRANDING', convs: ['Abril 2027', 'Octubre 2027'] },
+    { code: 'dg',         name: 'Máster en Diseño Gráfico', siglas: 'DISEÑO GRÁFICO', convs: ['Abril 2027', 'Octubre 2027'] },
+    { code: 'mobiliario', name: 'Máster en Diseño de Mobiliario', siglas: 'MOB', convs: ['Octubre 2027'] },
+    { code: 'retail',     name: 'Máster en Retail Design y Experiencia Espacial', siglas: 'MRE', convs: ['Abril 2027', 'Octubre 2027'] },
+    { code: 'decoracion', name: 'Máster en Decoración de Interiores', siglas: 'DECORACIÓN', convs: ['Octubre 2027'] },
+    { code: 'uxui',       name: 'Máster en UX/UI', siglas: 'UX/UI', convs: ['Octubre 2027'] },
+    { code: 'motion',     name: 'Máster en Motion Graphics', siglas: 'MOTION GRAPHICS', convs: ['Octubre 2027'] },
+    { code: 'eventos',    name: 'Máster en Dirección y Creación de Eventos', siglas: 'EVENTOS', convs: ['Octubre 2027'] },
+    { code: 'marketing',  name: 'Máster en Marketing para Creativos', siglas: 'MARKETING', convs: ['Octubre 2027'] },
+    { code: 'packaging',  name: 'Máster en Packaging e Identidad de Marca', siglas: 'PACKAGING', convs: ['Octubre 2027'] },
+    { code: 'dc',         name: 'Máster en Dirección Creativa', siglas: 'DIRECCIÓN CREATIVA', convs: ['Octubre 2027'] }
+  ];
+  var BANK = [['Banco', 'BANKINTER'], ['IBAN', 'ES11 0128 0625 0601 0004 6592'], ['BIC/SWIFT', 'BKBKESMMXXX'], ['Titular', 'ARCHIFF INTERNATIONAL TECHNOLOGY SL']];
+  var PAGOS = { unico: 'Pago único', '6': '6 cuotas', '10': '10 cuotas' };
+
+  // ---------- Utilidades ----------
+  function $(id){ return document.getElementById(id); }
+  function val(id){ return $(id).value.trim(); }
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function euros(cents){
+    var neg = cents < 0; cents = Math.abs(Math.round(cents));
+    var e = Math.floor(cents / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    var c = ('0' + (cents % 100)).slice(-2);
+    return (neg ? '-' : '') + e + ',' + c + ' €';
+  }
+  function master(){ var c = $('formacion').value; for (var i = 0; i < MASTERS.length; i++) if (MASTERS[i].code === c) return MASTERS[i]; return null; }
+  function pago(){ var r = document.querySelector('input[name="pago"]:checked'); return r ? r.value : ''; }
+  function empresa(){ var r = document.querySelector('input[name="empresa"]:checked'); return r ? r.value : ''; }
+  function horario(m, conv){ if (!m || !conv) return '—'; if (conv.indexOf('Abril') === 0 && m.code !== 'mba') return 'Martes y jueves, de 19:00 a 21:00'; return 'Viernes, de 16:00 a 20:00'; }
+  // Importes en céntimos
+  var TOTAL = Math.round(CONFIG.precio * 100);
+  function importes(){
+    var unico = Math.round(TOTAL * 0.96);
+    function cuotas(n){ var c = Math.round(TOTAL / n); return { n: n, cuota: c, ultima: TOTAL - c * (n - 1) }; }
+    return { unico: unico, '6': cuotas(6), '10': cuotas(10) };
+  }
+  function concepto(){
+    var m = master(), conv = $('convocatoria').value, who = (val('nombre') + ' ' + val('apellidos')).trim() || 'Nombre y apellidos';
+    return who + ' – MATRÍCULA ' + (m ? m.siglas : '[MÁSTER]') + ' ' + (conv ? conv.toUpperCase() : '[CONVOCATORIA]') + ' ARCHIFF';
+  }
+  function fillBank(id){
+    var rows = BANK.concat([['Concepto', concepto()]]);
+    $(id).innerHTML = rows.map(function(r){ return '<dt>' + esc(r[0]) + '</dt><dd>' + esc(r[1]) + '</dd>'; }).join('');
+  }
+  // IBAN: dígito de control (mod 97); si es español, 24 caracteres
+  function ibanOk(raw){
+    var s = raw.replace(/\s+/g, '').toUpperCase();
+    if (!/^[A-Z]{2}\d{2}[A-Z0-9]{10,30}$/.test(s)) return false;
+    if (s.slice(0, 2) === 'ES' && !/^ES\d{22}$/.test(s)) return false;
+    var r = (s.slice(4) + s.slice(0, 4)).replace(/[A-Z]/g, function(ch){ return (ch.charCodeAt(0) - 55).toString(); });
+    var mod = 0; for (var i = 0; i < r.length; i++) mod = (mod * 10 + +r[i]) % 97;
+    return mod === 1;
+  }
+  // DNI / NIE: letra de control
+  function docOk(tipo, raw){
+    var s = raw.replace(/[\s-]/g, '').toUpperCase(), L = 'TRWAGMYFPDXBNJZSQVHLCKE';
+    if (tipo === 'DNI') return /^\d{8}[A-Z]$/.test(s) && L[+s.slice(0, 8) % 23] === s[8];
+    if (tipo === 'NIE'){ if (!/^[XYZ]\d{7}[A-Z]$/.test(s)) return false; var n = 'XYZ'.indexOf(s[0]) + s.slice(1, 8); return L[+n % 23] === s[8]; }
+    return s.length >= 5;
+  }
+  function cifOk(raw){ return /^[A-Z]\d{7}[A-Z0-9]$/.test(raw.replace(/[\s-]/g, '').toUpperCase()); }
+
+  // ---------- Montaje ----------
+  var selF = $('formacion'), selC = $('convocatoria');
+  MASTERS.forEach(function(m){ var o = document.createElement('option'); o.value = m.code; o.textContent = m.name; selF.appendChild(o); });
+  function fillConvs(){
+    var m = master(), prev = selC.value;
+    selC.innerHTML = '';
+    if (!m){ selC.disabled = true; selC.innerHTML = '<option value="">Elige antes la formación</option>'; }
+    else {
+      selC.disabled = false;
+      if (m.convs.length > 1) selC.innerHTML = '<option value="">Selecciona la convocatoria</option>';
+      m.convs.forEach(function(c){ var o = document.createElement('option'); o.value = c; o.textContent = c; selC.appendChild(o); });
+      if (m.convs.indexOf(prev) > -1) selC.value = prev;
+    }
+    refresh();
+  }
+  selF.addEventListener('change', fillConvs);
+  selC.addEventListener('change', refresh);
+
+  var imp = importes();
+  $('precio-txt').textContent = euros(TOTAL);
+  $('amt-unico').innerHTML = euros(imp.unico) + '<small>en un solo pago</small>';
+  ['6', '10'].forEach(function(k){
+    var q = imp[k];
+    $('amt-' + k).innerHTML = euros(q.cuota) + '/mes' + (q.ultima !== q.cuota ? '<small>última cuota: ' + euros(q.ultima) + '</small>' : '<small>' + q.n + ' cuotas iguales</small>');
+  });
+
+  function refresh(){
+    $('horario').value = horario(master(), selC.value);
+    var p = pago();
+    $('box-transfer').hidden = p !== 'unico';
+    $('box-domiciliacion').hidden = !(p === '6' || p === '10');
+    $('box-empresa').hidden = empresa() !== 'si';
+    if (p === 'unico') fillBank('bank-form');
+  }
+  document.querySelectorAll('input[name="pago"], input[name="empresa"]').forEach(function(r){
+    r.addEventListener('change', function(){ var g = r.closest('.group'); if (g) g.classList.remove('group-invalid'); refresh(); });
+  });
+  ['nombre', 'apellidos'].forEach(function(id){ $(id).addEventListener('input', function(){ if (pago() === 'unico') fillBank('bank-form'); }); });
+  $('iban').addEventListener('blur', function(){ var s = this.value.replace(/\s+/g, '').toUpperCase(); if (s) this.value = s.replace(/(.{4})/g, '$1 ').trim(); });
+  ['sepa', 'privacidad'].forEach(function(id){ $(id).addEventListener('change', function(){ var g = this.closest('.group'); if (g) g.classList.remove('group-invalid'); }); });
+
+  // Parámetros de la URL: ?formacion=mba&email=...
+  try {
+    var qs = new URLSearchParams(location.search);
+    var f = (qs.get('formacion') || '').toLowerCase().trim();
+    if (f && MASTERS.some(function(m){ return m.code === f; })){ selF.value = f; fillConvs(); }
+    var e = qs.get('email');
+    if (e) $('email').value = e.trim().replace(/ /g, '+');
+  } catch (err) {}
+  refresh();
+
+  // ---------- Validación ----------
+  var form = $('form');
+  function fieldOk(f){
+    var v = f.value.trim();
+    if (f.id === 'email') return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+    if (f.id === 'iban') return ibanOk(v);
+    if (f.id === 'numdoc') return v !== '' && docOk($('tipodoc').value, v);
+    if (f.id === 'cif') return cifOk(v);
+    return v !== '';
+  }
+  function requiredFields(){
+    var list = Array.prototype.slice.call(form.querySelectorAll('.f-input[required]'));
+    var p = pago();
+    if (p === '6' || p === '10') list = list.concat(Array.prototype.slice.call(form.querySelectorAll('[data-pay]')));
+    if (empresa() === 'si') list = list.concat(Array.prototype.slice.call(form.querySelectorAll('[data-empresa]')));
+    return list;
+  }
+  form.addEventListener('input', function(e){ if (e.target.classList.contains('invalid') && fieldOk(e.target)) e.target.classList.remove('invalid'); });
+  form.addEventListener('change', function(e){ if (e.target.classList && e.target.classList.contains('invalid') && fieldOk(e.target)) e.target.classList.remove('invalid'); });
+  $('tipodoc').addEventListener('change', function(){ var n = $('numdoc'); $('err-numdoc').textContent = this.value === 'Pasaporte' ? 'Escribe el número de pasaporte.' : 'Revisa el número: la letra no coincide.'; if (n.value) n.classList.toggle('invalid', !fieldOk(n)); });
+
+  function validate(){
+    var first = null, missing = 0;
+    requiredFields().forEach(function(f){ if (!fieldOk(f)){ f.classList.add('invalid'); missing++; first = first || f; } });
+    function grp(id, ok){ if (!ok){ $(id).classList.add('group-invalid'); missing++; first = first || $(id).querySelector('input'); } }
+    grp('grp-pago', !!pago());
+    if (pago() === '6' || pago() === '10') grp('grp-sepa', $('sepa').checked);
+    grp('grp-empresa', !!empresa());
+    grp('grp-priv', $('privacidad').checked);
+    return { missing: missing, first: first };
+  }
+
+  // ---------- Datos ----------
+  function utcMidnight(d){ return String(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())); }
+  function dateToUtc(iso){ var p = iso.split('-'); return String(Date.UTC(+p[0], +p[1] - 1, +p[2])); }
+  function referencia(){
+    var d = new Date(), abc = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', r = '';
+    for (var i = 0; i < 4; i++) r += abc[Math.floor(Math.random() * abc.length)];
+    return 'ARC-' + d.getFullYear() + ('0' + (d.getMonth() + 1)).slice(-2) + ('0' + d.getDate()).slice(-2) + '-' + r;
+  }
+  function collect(ref){
+    var m = master(), p = pago(), conv = selC.value, emp = empresa() === 'si';
+    var importe = p === 'unico' ? imp.unico : imp[p].cuota;
+    return {
+      referencia: ref, fecha: new Date().toISOString(),
+      formacionCode: m.code, formacion: m.name, siglas: m.siglas, convocatoria: conv, horario: horario(m, conv),
+      precio: CONFIG.precio, earlyBird: CONFIG.earlyBird, reserva: 250,
+      pago: p, pagoTexto: PAGOS[p],
+      importeTexto: p === 'unico' ? euros(imp.unico) : euros(imp[p].cuota) + ' al mes',
+      importe: importe / 100, ultimaCuota: p === 'unico' ? null : imp[p].ultima / 100, numCuotas: p === 'unico' ? 1 : imp[p].n,
+      concepto: p === 'unico' ? concepto() : '',
+      nombre: val('nombre'), apellidos: val('apellidos'), nacimiento: val('nacimiento'), email: val('email'), telefono: val('telefono'),
+      pais: val('pais'), nacionalidad: val('nacionalidad'), tipoDocumento: $('tipodoc').value, numeroDocumento: val('numdoc').toUpperCase(),
+      facturaEmpresa: emp, razonSocial: emp ? val('razon') : '', cif: emp ? val('cif').toUpperCase() : '',
+      domicilio: val('domicilio'), poblacion: val('poblacion'), provincia: val('provincia'), codigoPostal: val('cp'),
+      titular: p === 'unico' ? '' : val('titular'), iban: p === 'unico' ? '' : val('iban').replace(/\s+/g, '').toUpperCase(), bic: p === 'unico' ? '' : val('bic').toUpperCase(),
+      comunicaciones: $('comunicaciones').checked
+    };
+  }
+  function cookie(n){ try { var m = document.cookie.match(new RegExp('(?:^|; )' + n + '=([^;]*)')); return m ? decodeURIComponent(m[1]) : ''; } catch (err) { return ''; } }
+  function text(id){ return $(id).textContent.replace(/\s*\*\s*$/, '').replace(/\s+/g, ' ').trim(); }
+
+  // A HubSpot NO se envían el IBAN, el titular ni el BIC.
+  function hubspotBody(d){
+    var f = {
+      email: d.email, firstname: d.nombre, lastname: d.apellidos, phone: d.telefono,
+      matricula_formacion: d.formacionCode, matricula_convocatoria: d.convocatoria,
+      matricula_precio: String(d.precio), matricula_early_bird: String(d.earlyBird),
+      matricula_forma_pago: d.pagoTexto, matricula_importe: String(d.importe),
+      matricula_referencia: d.referencia, matricula_fecha_ficha: utcMidnight(new Date()),
+      matricula_fecha_nacimiento: dateToUtc(d.nacimiento), matricula_nacionalidad: d.nacionalidad, matricula_pais: d.pais,
+      matricula_tipo_documento: d.tipoDocumento, matricula_numero_documento: d.numeroDocumento,
+      matricula_domicilio: d.domicilio, matricula_poblacion: d.poblacion, matricula_provincia: d.provincia, matricula_codigo_postal: d.codigoPostal,
+      matricula_factura_empresa: String(d.facturaEmpresa), matricula_razon_social: d.razonSocial, matricula_cif: d.cif
+    };
+    var consent = { consentToProcess: true, text: text('txt-priv') };
+    if (CONFIG.hubspot.subscriptionTypeId) consent.communications = [{ value: d.comunicaciones, subscriptionTypeId: CONFIG.hubspot.subscriptionTypeId, text: text('txt-com') }];
+    var ctx = { pageUri: location.origin + location.pathname, pageName: document.title }, utk = cookie('hubspotutk');
+    if (utk) ctx.hutk = utk;
+    return {
+      submittedAt: String(Date.now()),
+      fields: Object.keys(f).filter(function(k){ return f[k] !== ''; }).map(function(k){ return { objectTypeId: '0-1', name: k, value: f[k] }; }),
+      context: ctx, legalConsentOptions: { consent: consent }
+    };
+  }
+  function sendScript(d){
+    if (!CONFIG.script.url || CONFIG.script.url.indexOf('__') === 0) return Promise.resolve();
+    var ctrl = window.AbortController ? new AbortController() : null;
+    var t = setTimeout(function(){ if (ctrl) ctrl.abort(); }, 30000);
+    return fetch(CONFIG.script.url, {
+      method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ secret: CONFIG.script.secret, data: d }), signal: ctrl ? ctrl.signal : undefined
+    }).catch(function(){}).then(function(){ clearTimeout(t); });
+  }
+
+  // ---------- Envío ----------
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var fe = $('formerror'), v = validate();
+    if (v.missing){
+      fe.textContent = v.missing === 1 ? 'Falta 1 dato o hay uno incorrecto. Lo hemos marcado en el formulario.' : 'Faltan ' + v.missing + ' datos o hay alguno incorrecto. Los hemos marcado en el formulario.';
+      fe.classList.add('show');
+      if (v.first){ v.first.scrollIntoView({ block: 'center' }); v.first.focus({ preventScroll: true }); }
+      return;
+    }
+    fe.classList.remove('show');
+    var btn = $('btn-send'); btn.disabled = true; btn.textContent = 'Enviando…';
+    var d = collect(referencia());
+    fetch('https://api.hsforms.com/submissions/v3/integration/submit/' + CONFIG.hubspot.portalId + '/' + CONFIG.hubspot.formGuid, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(hubspotBody(d))
+    }).then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); })
+      .then(function(){ return sendScript(d).then(function(){ showDone(d); }); })
+      .catch(function(){
+        btn.disabled = false; btn.textContent = 'Enviar matrícula';
+        fe.innerHTML = 'No hemos podido enviar tu matrícula. Comprueba tu conexión e inténtalo de nuevo. Si sigue sin funcionar, escríbenos a <a href="mailto:info@archiff.com">info@archiff.com</a>.';
+        fe.classList.add('show'); fe.scrollIntoView({ block: 'center' });
+      });
+  });
+
+  function showDone(d){
+    var rows = [
+      ['Referencia', d.referencia], ['Alumno/a', d.nombre + ' ' + d.apellidos], ['Formación', d.formacion],
+      ['Convocatoria', d.convocatoria], ['Horario', d.horario], ['Precio total', euros(Math.round(d.precio * 100))],
+      ['Reserva abonada', '250,00 €'], ['Forma de pago', d.pagoTexto],
+      d.pago === 'unico' ? ['Importe a transferir', d.importeTexto] : ['Cuota mensual', d.importeTexto + (d.ultimaCuota !== d.importe ? ' (última: ' + euros(Math.round(d.ultimaCuota * 100)) + ')' : '')]
+    ];
+    $('summary').innerHTML = rows.map(function(r){ return '<div class="kv"><span class="kv-k">' + esc(r[0]) + '</span><span class="kv-v">' + esc(r[1]) + '</span></div>'; }).join('');
+    $('done-transfer').hidden = d.pago !== 'unico';
+    if (d.pago === 'unico') fillBank('bank-done');
+    $('formwrap').hidden = true;
+    var box = $('done'); box.classList.add('show');
+    window.scrollTo(0, 0); box.focus({ preventScroll: true });
+  }
+})();
+</script>
+</body>
+</html>
